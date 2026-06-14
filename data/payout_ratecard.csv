@@ -1,0 +1,4 @@
+vehicle_type,base_payout,payout_per_km,payout_per_order
+Bicycle,18.0,4.5,6.0
+Motorcycle,22.0,6.5,8.0
+Electric Scooter,20.0,5.5,7.0

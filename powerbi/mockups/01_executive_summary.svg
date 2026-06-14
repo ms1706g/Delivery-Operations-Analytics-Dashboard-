@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900">
+<rect x="0" y="0" width="1440" height="900" rx="0" fill="#09111f" stroke="none"/>
+<rect x="0" y="0" width="1440" height="82" rx="0" fill="#101d32" stroke="none"/>
+<text x="40" y="48" font-family="Segoe UI,Arial" font-size="30" font-weight="700" fill="#ffffff" text-anchor="start">Delivery Operations</text>
+<text x="1400" y="46" font-family="Segoe UI,Arial" font-size="15" font-weight="400" fill="#9fb2cc" text-anchor="end">Executive Summary</text>
+<rect x="40" y="112" width="255" height="118" rx="14" fill="#13233a" stroke="none"/>
+<rect x="40" y="112" width="6" height="118" rx="3" fill="#43d9ad" stroke="none"/>
+<text x="64" y="148" font-family="Segoe UI,Arial" font-size="15" font-weight="600" fill="#93a8c3" text-anchor="start">Delivered Orders</text>
+<text x="64" y="196" font-family="Segoe UI,Arial" font-size="31" font-weight="700" fill="#ffffff" text-anchor="start">56,912</text>
+<rect x="315" y="112" width="255" height="118" rx="14" fill="#13233a" stroke="none"/>
+<rect x="315" y="112" width="6" height="118" rx="3" fill="#43d9ad" stroke="none"/>
+<text x="339" y="148" font-family="Segoe UI,Arial" font-size="15" font-weight="600" fill="#93a8c3" text-anchor="start">Active Riders</text>
+<text x="339" y="196" font-family="Segoe UI,Arial" font-size="31" font-weight="700" fill="#ffffff" text-anchor="start">600</text>
+<rect x="590" y="112" width="255" height="118" rx="14" fill="#13233a" stroke="none"/>
+<rect x="590" y="112" width="6" height="118" rx="3" fill="#43d9ad" stroke="none"/>
+<text x="614" y="148" font-family="Segoe UI,Arial" font-size="15" font-weight="600" fill="#93a8c3" text-anchor="start">Average CPD</text>
+<text x="614" y="196" font-family="Segoe UI,Arial" font-size="31" font-weight="700" fill="#ffffff" text-anchor="start">INR 57.16</text>
+<rect x="865" y="112" width="255" height="118" rx="14" fill="#13233a" stroke="none"/>
+<rect x="865" y="112" width="6" height="118" rx="3" fill="#43d9ad" stroke="none"/>
+<text x="889" y="148" font-family="Segoe UI,Arial" font-size="15" font-weight="600" fill="#93a8c3" text-anchor="start">Avg Productivity</text>
+<text x="889" y="196" font-family="Segoe UI,Arial" font-size="31" font-weight="700" fill="#ffffff" text-anchor="start">0.13/hr</text>
+<rect x="1140" y="112" width="255" height="118" rx="14" fill="#13233a" stroke="none"/>
+<rect x="1140" y="112" width="6" height="118" rx="3" fill="#43d9ad" stroke="none"/>
+<text x="1164" y="148" font-family="Segoe UI,Arial" font-size="15" font-weight="600" fill="#93a8c3" text-anchor="start">Avg Distance</text>
+<text x="1164" y="196" font-family="Segoe UI,Arial" font-size="31" font-weight="700" fill="#ffffff" text-anchor="start">4.01 km</text>
+<rect x="40" y="260" width="850" height="570" rx="14" fill="#13233a" stroke="none"/>
+<text x="64" y="298" font-family="Segoe UI,Arial" font-size="18" font-weight="600" fill="#ffffff" text-anchor="start">Monthly Cost Per Delivery</text>
+<polyline points="78.0,503.1 111.7,772.0 145.3,511.9 179.0,658.0 212.6,616.0 246.3,474.3 279.9,594.5 313.6,617.6 347.2,459.5 380.9,513.1 414.5,480.8 448.2,710.3 481.8,332.0 515.5,539.9 549.1,577.5 582.8,641.3 616.4,622.0 650.1,558.4 683.7,528.0 717.4,566.8 751.0,584.4 784.7,517.7 818.3,564.7 852.0,602.0" fill="none" stroke="#5ba8ff" stroke-width="4"/>
+<circle cx="78.0" cy="503.13466876610653" r="5" fill="#43d9ad"/>
+<text x="78.0" y="808" font-family="Segoe UI,Arial" font-size="11" font-weight="400" fill="#9fb2cc" text-anchor="middle">24-01-01</text>
+<circle cx="111.65217391304347" cy="772.0" r="5" fill="#43d9ad"/>
+<circle cx="145.30434782608694" cy="511.92304934761165" r="5" fill="#43d9ad"/>
+<circle cx="178.95652173913044" cy="658.0149614089535" r="5" fill="#43d9ad"/>
+<circle cx="212.6086956521739" cy="616.0265367618563" r="5" fill="#43d9ad"/>
+<text x="212.6086956521739" y="808" font-family="Segoe UI,Arial" font-size="11" font-weight="400" fill="#9fb2cc" text-anchor="middle">24-05-01</text>
+<circle cx="246.2608695652174" cy="474.29418849539775" r="5" fill="#43d9ad"/>
+<circle cx="279.9130434782609" cy="594.4658476846691" r="5" fill="#43d9ad"/>
+<circle cx="313.5652173913044" cy="617.6170754968039" r="5" fill="#43d9ad"/>
+<circle cx="347.2173913043478" cy="459.53898757640087" r="5" fill="#43d9ad"/>
+<text x="347.2173913043478" y="808" font-family="Segoe UI,Arial" font-size="11" font-weight="400" fill="#9fb2cc" text-anchor="middle">24-09-01</text>
+<circle cx="380.8695652173913" cy="513.1080083746269" r="5" fill="#43d9ad"/>
+<circle cx="414.5217391304348" cy="480.82862845180614" r="5" fill="#43d9ad"/>
+<circle cx="448.17391304347825" cy="710.3068353112992" r="5" fill="#43d9ad"/>
+<circle cx="481.82608695652175" cy="332.0" r="5" fill="#43d9ad"/>
+<text x="481.82608695652175" y="808" font-family="Segoe UI,Arial" font-size="11" font-weight="400" fill="#9fb2cc" text-anchor="middle">25-01-01</text>
+<circle cx="515.4782608695652" cy="539.8788112774266" r="5" fill="#43d9ad"/>
+<circle cx="549.1304347826087" cy="577.5185220103451" r="5" fill="#43d9ad"/>
+<circle cx="582.7826086956522" cy="641.340983844151" r="5" fill="#43d9ad"/>
+<circle cx="616.4347826086956" cy="622.0097961099107" r="5" fill="#43d9ad"/>
+<text x="616.4347826086956" y="808" font-family="Segoe UI,Arial" font-size="11" font-weight="400" fill="#9fb2cc" text-anchor="middle">25-05-01</text>
+<circle cx="650.0869565217391" cy="558.4216652420729" r="5" fill="#43d9ad"/>
+<circle cx="683.7391304347826" cy="527.998132752065" r="5" fill="#43d9ad"/>
+<circle cx="717.3913043478261" cy="566.8034359344723" r="5" fill="#43d9ad"/>
+<circle cx="751.0434782608696" cy="584.393282347254" r="5" fill="#43d9ad"/>
+<text x="751.0434782608696" y="808" font-family="Segoe UI,Arial" font-size="11" font-weight="400" fill="#9fb2cc" text-anchor="middle">25-09-01</text>
+<circle cx="784.695652173913" cy="517.7112490635017" r="5" fill="#43d9ad"/>
+<circle cx="818.3478260869565" cy="564.6539502837115" r="5" fill="#43d9ad"/>
+<circle cx="852.0" cy="602.018858710445" r="5" fill="#43d9ad"/>
+<rect x="920" y="260" width="480" height="570" rx="14" fill="#13233a" stroke="none"/>
+<text x="944" y="298" font-family="Segoe UI,Arial" font-size="18" font-weight="600" fill="#ffffff" text-anchor="start">Orders by City</text>
+<rect x="938.4" y="330.0" width="43.2" height="455.0" rx="5" fill="#5ba8ff" stroke="none"/>
+<text x="960.0" y="808" font-family="Segoe UI,Arial" font-size="12" font-weight="400" fill="#9fb2cc" text-anchor="middle">Bengaluru</text>
+<rect x="1018.4" y="424.34420584736745" width="43.2" height="360.65579415263255" rx="5" fill="#5ba8ff" stroke="none"/>
+<text x="1040.0" y="808" font-family="Segoe UI,Arial" font-size="12" font-weight="400" fill="#9fb2cc" text-anchor="middle">Delhi</text>
+<rect x="1098.4" y="495.1878169410881" width="43.2" height="289.8121830589119" rx="5" fill="#5ba8ff" stroke="none"/>
+<text x="1120.0" y="808" font-family="Segoe UI,Arial" font-size="12" font-weight="400" fill="#9fb2cc" text-anchor="middle">Mumbai</text>
+<rect x="1178.4" y="575.631064922056" width="43.2" height="209.36893507794403" rx="5" fill="#5ba8ff" stroke="none"/>
+<text x="1200.0" y="808" font-family="Segoe UI,Arial" font-size="12" font-weight="400" fill="#9fb2cc" text-anchor="middle">Hyderabad</text>
+<rect x="1258.4" y="609.4434357979089" width="43.2" height="175.55656420209104" rx="5" fill="#5ba8ff" stroke="none"/>
+<text x="1280.0" y="808" font-family="Segoe UI,Arial" font-size="12" font-weight="400" fill="#9fb2cc" text-anchor="middle">Pune</text>
+<rect x="1338.4" y="654.2227508921305" width="43.2" height="130.77724910786952" rx="5" fill="#5ba8ff" stroke="none"/>
+<text x="1360.0" y="808" font-family="Segoe UI,Arial" font-size="12" font-weight="400" fill="#9fb2cc" text-anchor="middle">Chennai</text>
+</svg>

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900">
+<rect x="0" y="0" width="1440" height="900" rx="0" fill="#09111f" stroke="none"/>
+<rect x="0" y="0" width="1440" height="82" rx="0" fill="#101d32" stroke="none"/>
+<text x="40" y="48" font-family="Segoe UI,Arial" font-size="30" font-weight="700" fill="#ffffff" text-anchor="start">Delivery Operations</text>
+<text x="1400" y="46" font-family="Segoe UI,Arial" font-size="15" font-weight="400" fill="#9fb2cc" text-anchor="end">1P vs 3P Performance</text>
+<rect x="40" y="120" width="420" height="118" rx="14" fill="#13233a" stroke="none"/>
+<rect x="40" y="120" width="6" height="118" rx="3" fill="#43d9ad" stroke="none"/>
+<text x="64" y="156" font-family="Segoe UI,Arial" font-size="15" font-weight="600" fill="#93a8c3" text-anchor="start">1P Delivered Orders</text>
+<text x="64" y="204" font-family="Segoe UI,Arial" font-size="31" font-weight="700" fill="#ffffff" text-anchor="start">37,849</text>
+<rect x="510" y="120" width="420" height="118" rx="14" fill="#13233a" stroke="none"/>
+<rect x="510" y="120" width="6" height="118" rx="3" fill="#f7b955" stroke="none"/>
+<text x="534" y="156" font-family="Segoe UI,Arial" font-size="15" font-weight="600" fill="#93a8c3" text-anchor="start">3P Delivered Orders</text>
+<text x="534" y="204" font-family="Segoe UI,Arial" font-size="31" font-weight="700" fill="#ffffff" text-anchor="start">19,063</text>
+<rect x="980" y="120" width="420" height="118" rx="14" fill="#13233a" stroke="none"/>
+<rect x="980" y="120" width="6" height="118" rx="3" fill="#e96b78" stroke="none"/>
+<text x="1004" y="156" font-family="Segoe UI,Arial" font-size="15" font-weight="600" fill="#93a8c3" text-anchor="start">CPD Gap</text>
+<text x="1004" y="204" font-family="Segoe UI,Arial" font-size="31" font-weight="700" fill="#ffffff" text-anchor="start">INR -1.92</text>
+<rect x="40" y="280" width="650" height="550" rx="14" fill="#13233a" stroke="none"/>
+<text x="64" y="318" font-family="Segoe UI,Arial" font-size="18" font-weight="600" fill="#ffffff" text-anchor="start">Orders Delivered</text>
+<rect x="114.75" y="350.0" width="175.5" height="435.0" rx="5" fill="#5ba8ff" stroke="none"/>
+<text x="202.5" y="808" font-family="Segoe UI,Arial" font-size="12" font-weight="400" fill="#9fb2cc" text-anchor="middle">1P</text>
+<rect x="439.75" y="565.9082142196623" width="175.5" height="219.09178578033766" rx="5" fill="#5ba8ff" stroke="none"/>
+<text x="527.5" y="808" font-family="Segoe UI,Arial" font-size="12" font-weight="400" fill="#9fb2cc" text-anchor="middle">3P</text>
+<rect x="720" y="280" width="680" height="550" rx="14" fill="#13233a" stroke="none"/>
+<text x="744" y="318" font-family="Segoe UI,Arial" font-size="18" font-weight="600" fill="#ffffff" text-anchor="start">Average CPD</text>
+<rect x="798.2" y="350.0" width="183.60000000000002" height="435.0" rx="5" fill="#f7b955" stroke="none"/>
+<text x="890.0" y="808" font-family="Segoe UI,Arial" font-size="12" font-weight="400" fill="#9fb2cc" text-anchor="middle">1P</text>
+<rect x="1138.2" y="364.41373657455733" width="183.60000000000002" height="420.58626342544267" rx="5" fill="#f7b955" stroke="none"/>
+<text x="1230.0" y="808" font-family="Segoe UI,Arial" font-size="12" font-weight="400" fill="#9fb2cc" text-anchor="middle">3P</text>
+</svg>

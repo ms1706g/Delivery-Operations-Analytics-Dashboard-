@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900">
+<rect x="0" y="0" width="1440" height="900" rx="0" fill="#09111f" stroke="none"/>
+<rect x="0" y="0" width="1440" height="82" rx="0" fill="#101d32" stroke="none"/>
+<text x="40" y="48" font-family="Segoe UI,Arial" font-size="30" font-weight="700" fill="#ffffff" text-anchor="start">Delivery Operations</text>
+<text x="1400" y="46" font-family="Segoe UI,Arial" font-size="15" font-weight="400" fill="#9fb2cc" text-anchor="end">Cost Control</text>
+<rect x="40" y="120" width="420" height="118" rx="14" fill="#13233a" stroke="none"/>
+<rect x="40" y="120" width="6" height="118" rx="3" fill="#e96b78" stroke="none"/>
+<text x="64" y="156" font-family="Segoe UI,Arial" font-size="15" font-weight="600" fill="#93a8c3" text-anchor="start">Payout Variance</text>
+<text x="64" y="204" font-family="Segoe UI,Arial" font-size="31" font-weight="700" fill="#ffffff" text-anchor="start">INR 10,267</text>
+<rect x="510" y="120" width="420" height="118" rx="14" fill="#13233a" stroke="none"/>
+<rect x="510" y="120" width="6" height="118" rx="3" fill="#f7b955" stroke="none"/>
+<text x="534" y="156" font-family="Segoe UI,Arial" font-size="15" font-weight="600" fill="#93a8c3" text-anchor="start">Cost Anomalies</text>
+<text x="534" y="204" font-family="Segoe UI,Arial" font-size="31" font-weight="700" fill="#ffffff" text-anchor="start">2,433</text>
+<rect x="980" y="120" width="420" height="118" rx="14" fill="#13233a" stroke="none"/>
+<rect x="980" y="120" width="6" height="118" rx="3" fill="#5ba8ff" stroke="none"/>
+<text x="1004" y="156" font-family="Segoe UI,Arial" font-size="15" font-weight="600" fill="#93a8c3" text-anchor="start">Anomaly Rate</text>
+<text x="1004" y="204" font-family="Segoe UI,Arial" font-size="31" font-weight="700" fill="#ffffff" text-anchor="start">4.28%</text>
+<rect x="40" y="280" width="850" height="550" rx="14" fill="#13233a" stroke="none"/>
+<text x="64" y="318" font-family="Segoe UI,Arial" font-size="18" font-weight="600" fill="#ffffff" text-anchor="start">Monthly Payout Variance</text>
+<polyline points="78.0,510.1 111.7,497.0 145.3,516.8 179.0,645.3 212.6,735.2 246.3,744.3 279.9,690.9 313.6,606.2 347.2,638.9 380.9,471.3 414.5,533.5 448.2,600.1 481.8,635.3 515.5,488.4 549.1,352.0 582.8,616.3 616.4,478.9 650.1,662.5 683.7,439.3 717.4,772.0 751.0,528.6 784.7,494.5 818.3,540.0 852.0,563.4" fill="none" stroke="#5ba8ff" stroke-width="4"/>
+<circle cx="78.0" cy="510.105019206959" r="5" fill="#43d9ad"/>
+<text x="78.0" y="808" font-family="Segoe UI,Arial" font-size="11" font-weight="400" fill="#9fb2cc" text-anchor="middle">24-01</text>
+<circle cx="111.65217391304347" cy="496.9846026857996" r="5" fill="#43d9ad"/>
+<circle cx="145.30434782608694" cy="516.7652306422426" r="5" fill="#43d9ad"/>
+<circle cx="178.95652173913044" cy="645.2826438934569" r="5" fill="#43d9ad"/>
+<circle cx="212.6086956521739" cy="735.2054985872568" r="5" fill="#43d9ad"/>
+<text x="212.6086956521739" y="808" font-family="Segoe UI,Arial" font-size="11" font-weight="400" fill="#9fb2cc" text-anchor="middle">24-05</text>
+<circle cx="246.2608695652174" cy="744.2991206070035" r="5" fill="#43d9ad"/>
+<circle cx="279.9130434782609" cy="690.8974253150893" r="5" fill="#43d9ad"/>
+<circle cx="313.5652173913044" cy="606.1947363408362" r="5" fill="#43d9ad"/>
+<circle cx="347.2173913043478" cy="638.9357757389124" r="5" fill="#43d9ad"/>
+<text x="347.2173913043478" y="808" font-family="Segoe UI,Arial" font-size="11" font-weight="400" fill="#9fb2cc" text-anchor="middle">24-09</text>
+<circle cx="380.8695652173913" cy="471.29045366519574" r="5" fill="#43d9ad"/>
+<circle cx="414.5217391304348" cy="533.512428965999" r="5" fill="#43d9ad"/>
+<circle cx="448.17391304347825" cy="600.1212101971491" r="5" fill="#43d9ad"/>
+<circle cx="481.82608695652175" cy="635.3023270580019" r="5" fill="#43d9ad"/>
+<text x="481.82608695652175" y="808" font-family="Segoe UI,Arial" font-size="11" font-weight="400" fill="#9fb2cc" text-anchor="middle">25-01</text>
+<circle cx="515.4782608695652" cy="488.35766214800475" r="5" fill="#43d9ad"/>
+<circle cx="549.1304347826087" cy="352.0" r="5" fill="#43d9ad"/>
+<circle cx="582.7826086956522" cy="616.2750563509953" r="5" fill="#43d9ad"/>
+<circle cx="616.4347826086956" cy="478.8906949426966" r="5" fill="#43d9ad"/>
+<text x="616.4347826086956" y="808" font-family="Segoe UI,Arial" font-size="11" font-weight="400" fill="#9fb2cc" text-anchor="middle">25-05</text>
+<circle cx="650.0869565217391" cy="662.4898568208514" r="5" fill="#43d9ad"/>
+<circle cx="683.7391304347826" cy="439.3161052731833" r="5" fill="#43d9ad"/>
+<circle cx="717.3913043478261" cy="772.0" r="5" fill="#43d9ad"/>
+<circle cx="751.0434782608696" cy="528.5989396488778" r="5" fill="#43d9ad"/>
+<text x="751.0434782608696" y="808" font-family="Segoe UI,Arial" font-size="11" font-weight="400" fill="#9fb2cc" text-anchor="middle">25-09</text>
+<circle cx="784.695652173913" cy="494.53785834470943" r="5" fill="#43d9ad"/>
+<circle cx="818.3478260869565" cy="539.9793009301883" r="5" fill="#43d9ad"/>
+<circle cx="852.0" cy="563.3867106892283" r="5" fill="#43d9ad"/>
+<rect x="920" y="280" width="480" height="550" rx="14" fill="#13233a" stroke="none"/>
+<text x="944" y="318" font-family="Segoe UI,Arial" font-size="18" font-weight="600" fill="#ffffff" text-anchor="start">Anomalies by City</text>
+<rect x="938.4" y="350.0" width="43.2" height="435.0" rx="5" fill="#e96b78" stroke="none"/>
+<text x="960.0" y="808" font-family="Segoe UI,Arial" font-size="12" font-weight="400" fill="#9fb2cc" text-anchor="middle">Bengaluru</text>
+<rect x="1018.4" y="414.71625766871165" width="43.2" height="370.28374233128835" rx="5" fill="#e96b78" stroke="none"/>
+<text x="1040.0" y="808" font-family="Segoe UI,Arial" font-size="12" font-weight="400" fill="#9fb2cc" text-anchor="middle">Delhi</text>
+<rect x="1098.4" y="488.7730061349693" width="43.2" height="296.2269938650307" rx="5" fill="#e96b78" stroke="none"/>
+<text x="1120.0" y="808" font-family="Segoe UI,Arial" font-size="12" font-weight="400" fill="#9fb2cc" text-anchor="middle">Mumbai</text>
+<rect x="1178.4" y="537.4769938650306" width="43.2" height="247.52300613496934" rx="5" fill="#e96b78" stroke="none"/>
+<text x="1200.0" y="808" font-family="Segoe UI,Arial" font-size="12" font-weight="400" fill="#9fb2cc" text-anchor="middle">Hyderabad</text>
+<rect x="1258.4" y="647.5613496932515" width="43.2" height="137.43865030674846" rx="5" fill="#e96b78" stroke="none"/>
+<text x="1280.0" y="808" font-family="Segoe UI,Arial" font-size="12" font-weight="400" fill="#9fb2cc" text-anchor="middle">Chennai</text>
+<rect x="1338.4" y="648.2285276073619" width="43.2" height="136.77147239263803" rx="5" fill="#e96b78" stroke="none"/>
+<text x="1360.0" y="808" font-family="Segoe UI,Arial" font-size="12" font-weight="400" fill="#9fb2cc" text-anchor="middle">Pune</text>
+</svg>
