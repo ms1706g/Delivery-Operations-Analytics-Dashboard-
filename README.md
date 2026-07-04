@@ -1,74 +1,92 @@
-# Delivery Operations Analytics Dashboard
+# Delivery Operations Analytics & Cost Intelligence System
 
-A portfolio-ready delivery analytics project modeled on last-mile operations at
-food delivery, quick-commerce, and e-commerce logistics companies. It combines
-synthetic operational data, a reproducible ETL pipeline, SQLite analytics,
-Python exploration, payout reconciliation, anomaly detection, and a four-page
-Power BI design.
+End-to-end analytics project for last-mile delivery operations, combining **Python ETL pipelines, SQL analytics, SQLite, operational KPI modeling, payout reconciliation, statistical cost anomaly detection, and interactive dashboarding**.
 
-## Business Problem
+The system processes **60K+ delivery orders across 600 riders** to analyze delivery costs, rider performance, fleet economics, payout accuracy, and operational trends across first-party (1P) and third-party (3P) logistics channels.
 
-Delivery operations teams need to balance service volume, rider capacity, and
-unit economics. This project answers:
+---
 
-- What is the cost per completed delivery, and how does it change by city,
-  month, rider, and employment model?
-- Which riders are productive and well utilized?
-- How do first-party (1P) and third-party (3P) fleets compare?
-- Are invoices and rider payouts consistent with the approved rate card?
-- Which deliveries have unusually high costs and require investigation?
+## Project Overview
 
-## Project Results
+Delivery operations teams need to continuously balance service volume, rider capacity, delivery performance, and unit economics.
 
-The deterministic sample run produces:
+This project builds a reproducible analytics workflow that transforms raw operational data into validated analytical datasets, SQL-based business insights, and decision-ready dashboards.
+
+The analysis focuses on five business questions:
+
+- How does **Cost Per Delivery (CPD)** vary across cities, months, riders, and fleet models?
+- Which riders demonstrate the strongest productivity and utilization?
+- How do **1P and 3P logistics channels** compare in cost and operational performance?
+- Are rider payouts and third-party partner invoices consistent with approved rate cards?
+- Which deliveries exhibit unusually high costs and require operational investigation?
+
+---
+
+## Project Highlights
+
+- Processed **60,075 raw delivery records** and **600 rider profiles**.
+- Built a reproducible **Python ETL pipeline** for validation, deduplication, transformation, aggregation, and database loading.
+- Parsed and reconciled **12K third-party delivery records from nested JSON feeds**.
+- Developed SQL analytics for **CPD, rider productivity, utilization, fleet comparison, payout reconciliation, and time-series trends**.
+- Created weekly and monthly analytical marts for recurring KPI reporting.
+- Identified **2,433 high-cost deliveries** using statistical threshold-based anomaly detection.
+- Designed a four-page BI dashboard specification covering executive, rider, fleet, and cost-control analytics.
+- Built a standalone interactive dashboard for offline exploration of operational KPIs.
+
+---
+
+## Key Results
 
 | Metric | Result |
 |---|---:|
-| Riders | 600 |
-| Valid orders | 59,990 |
-| Delivered orders | 56,912 |
-| Partner deliveries | 11,998 |
-| Average CPD | INR 57.16 |
-| Cost anomalies | 2,433 |
-| Data period | 2024-01-01 to 2025-12-31 |
+| Rider Profiles | 600 |
+| Raw Order Records | 60,075 |
+| Valid Orders After ETL | 59,990 |
+| Delivered Orders | 56,912 |
+| Third-Party Delivery Records | 11,998 |
+| Average Cost Per Delivery | INR 57.16 |
+| Statistical Cost Anomalies | 2,433 |
+| Analysis Period | Jan 2024 - Dec 2025 |
 
-## Dataset Description
+---
 
-| Source | Grain | Rows generated | Purpose |
-|---|---|---:|---|
-| `riders.csv` | One rider | 600 | Rider profile and planned shift |
-| `orders.csv` | One order | 60,075 raw | Delivery activity and outcomes |
-| `payout_ratecard.csv` | One vehicle type | 3 | Contract payout rules |
-| `third_party_feed.json` | One partner delivery | 12,000 raw | 3P invoice reconciliation |
-
-The raw order file deliberately includes 75 duplicate rows and 10 invalid dates.
-The ETL audit removes these records and reports two partner rows that no longer
-match after cleaning.
-
-## Architecture
+## Analytics Architecture
 
 ```mermaid
 flowchart LR
-    A["Synthetic data generator"] --> B["CSV and JSON raw layer"]
-    B --> C["Python ETL: validate, deduplicate, standardize"]
-    C --> D["Transform: payouts, cost, revenue, margin"]
-    D --> E["Aggregate: rider-day, week, month"]
-    E --> F[("SQLite analytics database")]
-    F --> G["SQL analysis"]
-    F --> H["Jupyter notebook"]
-    F --> I["Power BI semantic model"]
-    I --> J["Executive, Rider, Fleet, Cost pages"]
+    A["Synthetic Data Generator"] --> B["CSV & JSON Raw Data Layer"]
+    B --> C["Python ETL Pipeline"]
+    C --> D["Validation & Data Quality Controls"]
+    D --> E["Business Metric Transformation"]
+    E --> F["Rider-Day, Weekly & Monthly Aggregation"]
+    F --> G[("SQLite Analytics Database")]
+
+    G --> H["SQL Business Analysis"]
+    G --> I["Jupyter Exploratory Analysis"]
+    G --> J["BI Semantic Model & Dashboard Design"]
+
+    J --> K["Executive Summary"]
+    J --> L["Rider Analytics"]
+    J --> M["1P vs 3P Fleet Analysis"]
+    J --> N["Cost Control & Reconciliation"]
 ```
 
-## Entity Relationship Diagram
+---
+
+## Data Model
 
 ```mermaid
 erDiagram
+
     RIDERS ||--o{ ORDERS : fulfills
+
     RIDERS ||--o{ RIDER_DAILY_METRICS : summarized_as
+
     ORDERS ||--o| PARTNER_ORDERS : reconciled_with
+
     ORDERS ||--o| DELIVERY_METRICS : transformed_into
-    PAYOUT_RATECARD ||--o{ DELIVERY_METRICS : prices
+
+    PAYOUT_RATECARD ||--o{ DELIVERY_METRICS : determines
 
     RIDERS {
         text rider_id PK
@@ -79,6 +97,7 @@ erDiagram
         text employment_type
         real shift_hours
     }
+
     ORDERS {
         text order_id PK
         date order_date
@@ -90,6 +109,7 @@ erDiagram
         real order_value
         text delivery_status
     }
+
     PARTNER_ORDERS {
         text order_id PK,FK
         text partner_name
@@ -97,6 +117,7 @@ erDiagram
         real partner_fee
         real delivery_time
     }
+
     DELIVERY_METRICS {
         text order_id PK,FK
         real expected_payout
@@ -109,145 +130,430 @@ erDiagram
     }
 ```
 
-## ETL Workflow
+---
 
-1. Read rider, order, and rate-card CSV files.
-2. Parse the nested logistics partner JSON feed.
-3. Validate dates, numeric ranges, business enums, foreign keys, and identifiers.
-4. Remove duplicate orders and reject malformed records.
-5. Calculate expected payout from vehicle rate cards.
-6. Reconcile expected and actual payout; use partner fees for matched 3P orders.
-7. Calculate delivery cost, allocated revenue, profit, and margin.
-8. Flag cost anomalies above population mean plus two standard deviations.
-9. Aggregate rider-day productivity/utilization and weekly/monthly KPIs.
-10. Load all source and analytical tables into SQLite in one transaction.
+## Dataset Description
 
-## KPI Definitions
+The project uses reproducible synthetic operational data designed to simulate common data-quality and analytics challenges in last-mile delivery operations.
 
-| KPI | Formula |
+| Source | Data Grain | Records | Purpose |
+|---|---|---:|---|
+| `riders.csv` | One rider | 600 | Rider profiles and planned shifts |
+| `orders.csv` | One delivery order | 60,075 raw | Delivery activity and outcomes |
+| `payout_ratecard.csv` | One vehicle type | 3 | Contract payout rules |
+| `third_party_feed.json` | One partner delivery | 12,000 raw | Third-party invoice reconciliation |
+
+The raw data intentionally includes:
+
+- Duplicate order records.
+- Invalid date values.
+- Third-party partner records that no longer match after order cleaning.
+- Differences between expected and actual payout amounts.
+
+These conditions are used to demonstrate data validation, quality auditing, reconciliation, and exception analysis.
+
+---
+
+## ETL Pipeline
+
+The ETL workflow converts raw operational data into validated, analysis-ready datasets.
+
+### 1. Data Extraction
+
+- Loads rider, order, and payout-rate-card CSV files.
+- Parses nested JSON feeds containing third-party logistics records.
+
+### 2. Data Validation
+
+The pipeline validates:
+
+- Date formats.
+- Numeric ranges.
+- Business category values.
+- Rider foreign-key relationships.
+- Unique order identifiers.
+- Required fields.
+
+### 3. Data Cleaning
+
+- Removes duplicate order records.
+- Rejects malformed dates and invalid records.
+- Standardizes operational fields.
+- Tracks rejected records through ETL audit outputs.
+
+### 4. Business Metric Transformation
+
+The pipeline calculates:
+
+- Expected rider payout.
+- Actual payout.
+- Payout variance.
+- Delivery cost.
+- Allocated revenue.
+- Profit.
+- Profit margin.
+- Statistical cost-anomaly indicators.
+
+### 5. Analytical Aggregation
+
+Operational data is aggregated into:
+
+- Rider-day performance metrics.
+- Weekly KPI tables.
+- Monthly KPI tables.
+
+### 6. Database Loading
+
+Source tables, transformed datasets, and analytical marts are loaded into SQLite within a single transaction.
+
+---
+
+## KPI Framework
+
+| KPI | Business Definition |
 |---|---|
 | Cost Per Delivery | Total delivery cost / delivered orders |
 | Rider Productivity | Delivered orders / planned shift hours |
 | Utilization Rate | Active delivery hours / planned shift hours |
-| Expected Payout | Base payout + distance rate + per-order payout |
+| Expected Payout | Base payout + distance payout + per-order payout |
 | Payout Variance | Actual payout - expected payout |
-| Revenue | Allocated platform commission plus service fee |
+| Revenue | Allocated platform commission + service fee |
 | Profit | Revenue - delivery cost |
 | Profit Margin | Profit / revenue |
-| Cost Anomaly | Delivery cost > mean + 2 population standard deviations |
+| Cost Anomaly | Delivery cost greater than mean + 2 population standard deviations |
 
-See [docs/kpi_documentation.md](docs/kpi_documentation.md) for business rules and
-[docs/data_dictionary.md](docs/data_dictionary.md) for field-level definitions.
+Detailed business rules are documented in:
 
-## SQL Analysis
+- [`docs/kpi_documentation.md`](docs/kpi_documentation.md)
+- [`docs/data_dictionary.md`](docs/data_dictionary.md)
+
+---
+
+## SQL Analytics
+
+The SQL analysis layer focuses on operational and business decision-making.
 
 The query pack includes:
 
-- CPD by city, month, and rider
-- Top and bottom riders by normalized productivity
-- 1P versus 3P cost, distance, productivity, and utilization
-- Rate-card reconciliation and largest invoice variances
-- Statistical cost anomaly detection in pure SQLite SQL
-- Weekly and monthly trend extracts
+- Cost Per Delivery by city.
+- Monthly CPD trends.
+- Rider-level cost and performance analysis.
+- Top and bottom riders by normalized productivity.
+- Rider utilization analysis.
+- First-party versus third-party fleet economics.
+- 1P vs 3P delivery cost comparison.
+- Rate-card payout reconciliation.
+- Largest invoice and payout variances.
+- Weekly operational trends.
+- Monthly performance trends.
+- City contribution to delivery volume.
+- Rider performance ranking.
+- Cost anomaly analysis.
+- Statistical cost-threshold computation using SQLite SQL.
 
-Run queries from [sql/analytics_queries.sql](sql/analytics_queries.sql).
+Explore the complete SQL query pack:
 
-## Dashboard
+[`sql/analytics_queries.sql`](sql/analytics_queries.sql)
 
-### Ready-to-Show Interactive Dashboard
+---
 
-Open [powerbi/delivery_operations_dashboard.html](powerbi/delivery_operations_dashboard.html)
-in Edge or Chrome. It is a standalone, offline dashboard with four navigable
-pages, working year/city/fleet filters, KPI cards, charts, tooltips, rider
-rankings, 1P/3P comparisons, and an anomaly audit table. No server, database
-connection, Python environment, or internet access is required to present it.
+# Dashboard
 
-The Power BI specification is in
-[powerbi/dashboard_design.md](powerbi/dashboard_design.md), including model
-relationships, DAX measures, layout, filters, and interaction behavior.
+The project includes a **four-page business intelligence dashboard design** covering executive KPIs, rider performance, fleet economics, and cost-control analysis.
 
-Generated dashboard mockups:
+A standalone interactive HTML dashboard is also included for offline exploration of filters, KPIs, trends, rider rankings, fleet comparisons, and anomaly records.
 
-![Executive Summary](powerbi/mockups/01_executive_summary.svg)
-![Rider Analytics](powerbi/mockups/02_rider_analytics.svg)
-![1P vs 3P](powerbi/mockups/03_1p_vs_3p.svg)
-![Cost Control](powerbi/mockups/04_cost_control.svg)
+## Interactive Dashboard
 
-## Key Insights
+Open:
 
-- Bengaluru drives the most volume with 15,973 delivered orders.
-- Overall CPD is INR 57.16; city CPD stays within a narrow operational band,
-  while Pune is lowest at INR 54.79.
-- 1P CPD is INR 57.80 versus INR 55.89 for 3P in this scenario.
-- 2,433 deliveries exceed the statistical cost threshold of INR 92.78.
-- Monthly volume grows from 2,301 deliveries in January 2024 to 2,597 in
-  December 2025, with predictable seasonal variation.
+[`powerbi/delivery_operations_dashboard.html`](powerbi/delivery_operations_dashboard.html)
 
-## Run Locally
+The dashboard can be opened locally in Edge or Chrome without requiring a database connection, Python environment, or external server.
 
-From the project root:
+The Power BI model relationships, DAX measures, filters, layout, and interaction specifications are documented in:
 
-```powershell
-python scripts/generate_data.py
-python etl/etl_pipeline.py
-python scripts/generate_dashboard_mockups.py
-python scripts/generate_interactive_dashboard.py
+[`powerbi/dashboard_design.md`](powerbi/dashboard_design.md)
+
+---
+
+## Executive Summary Dashboard
+
+![Executive Summary Dashboard](powerbi/mockups/01_executive_summary.svg)
+
+**Focus Areas**
+
+- Total delivery volume.
+- Average Cost Per Delivery.
+- Monthly CPD trends.
+- City-level performance.
+- Delivery volume distribution.
+- Operational anomaly monitoring.
+
+---
+
+## Rider Analytics Dashboard
+
+![Rider Analytics Dashboard](powerbi/mockups/02_rider_analytics.svg)
+
+**Focus Areas**
+
+- Rider productivity.
+- Utilization rate.
+- Delivered orders.
+- Rider-level CPD.
+- Performance rankings.
+- Underperforming rider identification.
+
+---
+
+## 1P vs 3P Fleet Analysis
+
+![1P vs 3P Fleet Analysis Dashboard](powerbi/mockups/03_1p_vs_3p.svg)
+
+**Focus Areas**
+
+- First-party versus third-party CPD.
+- Delivery volume comparison.
+- Distance and cost analysis.
+- Productivity differences.
+- Fleet utilization.
+- Partner performance.
+
+---
+
+## Cost Control & Reconciliation
+
+![Cost Control Dashboard](powerbi/mockups/04_cost_control.svg)
+
+**Focus Areas**
+
+- Expected versus actual payouts.
+- Payout variance.
+- Rate-card reconciliation.
+- High-cost deliveries.
+- Statistical anomaly thresholds.
+- Exception-level operational investigation.
+
+---
+
+## Key Business Insights
+
+### 1. Delivery Volume
+
+**Bengaluru generated the highest delivery volume with 15,973 completed deliveries**, making it the largest operating market in the dataset.
+
+### 2. Cost Per Delivery
+
+Overall **Cost Per Delivery was INR 57.16**.
+
+City-level CPD remained relatively stable, while **Pune recorded the lowest CPD at INR 54.79**.
+
+### 3. First-Party vs Third-Party Fleet Economics
+
+First-party delivery CPD was **INR 57.80**, compared with **INR 55.89 for third-party deliveries** in the generated scenario.
+
+The difference demonstrates how fleet models can be evaluated using cost, delivery volume, utilization, and productivity metrics rather than cost alone.
+
+### 4. Cost Anomaly Detection
+
+The statistical cost threshold was calculated at **INR 92.78**.
+
+A total of **2,433 deliveries exceeded the threshold** and were flagged for operational review.
+
+### 5. Delivery Volume Trend
+
+Monthly delivery volume increased from **2,301 deliveries in January 2024 to 2,597 deliveries in December 2025**, with recurring seasonal variation across the analysis period.
+
+---
+
+## Statistical Cost Anomaly Detection
+
+High-cost deliveries are identified using a statistical threshold:
+
+```text
+Cost Threshold = Population Mean + (2 x Population Standard Deviation)
 ```
 
-The three commands above require only Python 3.10+.
+Deliveries exceeding the calculated threshold are flagged for further operational investigation.
 
-For the notebook:
+This approach provides a reproducible baseline for identifying unusual delivery costs while keeping the methodology transparent and interpretable.
 
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-jupyter lab notebooks/delivery_operations_analysis.ipynb
-```
-
-To inspect the database:
-
-```powershell
-python -c "import sqlite3; c=sqlite3.connect('delivery_operations.db'); print(c.execute('SELECT COUNT(*) FROM delivery_metrics').fetchone())"
-```
+---
 
 ## Repository Structure
 
 ```text
 delivery-operations-dashboard/
+|
 |-- data/
 |   |-- riders.csv
 |   |-- orders.csv
 |   |-- payout_ratecard.csv
 |   `-- third_party_feed.json
+|
 |-- docs/
 |   |-- data_dictionary.md
 |   `-- kpi_documentation.md
+|
 |-- etl/
 |   `-- etl_pipeline.py
+|
 |-- notebooks/
 |   `-- delivery_operations_analysis.ipynb
+|
 |-- powerbi/
 |   |-- mockups/
-|   `-- dashboard_design.md
+|   |   |-- 01_executive_summary.svg
+|   |   |-- 02_rider_analytics.svg
+|   |   |-- 03_1p_vs_3p.svg
+|   |   `-- 04_cost_control.svg
+|   |
+|   |-- dashboard_design.md
+|   `-- delivery_operations_dashboard.html
+|
 |-- scripts/
 |   |-- generate_data.py
-|   `-- generate_dashboard_mockups.py
+|   |-- generate_dashboard_mockups.py
+|   `-- generate_interactive_dashboard.py
+|
 |-- sql/
 |   |-- schema.sql
 |   `-- analytics_queries.sql
+|
 |-- delivery_operations.db
 |-- requirements.txt
 `-- README.md
 ```
 
-## Resume Bullet Points
+---
 
-- Built an end-to-end delivery operations analytics solution over 60K orders
-  and 600 riders using Python, SQL, SQLite, and Power BI design patterns.
-- Engineered a reproducible ETL pipeline with data-quality controls, payout
-  reconciliation, rider productivity, utilization, CPD, and profit metrics.
-- Developed weekly and monthly KPI marts plus statistical anomaly detection to
-  identify 2.4K high-cost deliveries for operational review.
-- Designed a four-page executive dashboard comparing city, rider, and 1P/3P
-  performance with drill-through and reconciliation workflows.
+## Run the Project Locally
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/ms1706g/Delivery-Operations-Analytics-Dashboard-.git
+cd Delivery-Operations-Analytics-Dashboard-
+```
+
+### 2. Create the Dataset
+
+```bash
+python scripts/generate_data.py
+```
+
+### 3. Run the ETL Pipeline
+
+```bash
+python etl/etl_pipeline.py
+```
+
+### 4. Generate Dashboard Mockups
+
+```bash
+python scripts/generate_dashboard_mockups.py
+```
+
+### 5. Generate the Interactive Dashboard
+
+```bash
+python scripts/generate_interactive_dashboard.py
+```
+
+---
+
+## Run the Jupyter Notebook
+
+Create a virtual environment:
+
+```bash
+python -m venv .venv
+```
+
+Activate the environment on Windows:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Launch Jupyter Lab:
+
+```bash
+jupyter lab notebooks/delivery_operations_analysis.ipynb
+```
+
+---
+
+## Inspect the Analytics Database
+
+```bash
+python -c "import sqlite3; c=sqlite3.connect('delivery_operations.db'); print(c.execute('SELECT COUNT(*) FROM delivery_metrics').fetchone())"
+```
+
+---
+
+## Technology Stack
+
+| Category | Technologies |
+|---|---|
+| Programming | Python |
+| Data Analysis | Pandas, NumPy |
+| Querying | SQL |
+| Database | SQLite |
+| Data Engineering | ETL Pipelines, Data Validation, JSON Parsing |
+| Business Intelligence | Power BI Design Patterns, Interactive Dashboarding |
+| Statistical Analysis | Threshold-Based Cost Anomaly Detection |
+| Development Tools | Git, GitHub, Jupyter Notebook |
+
+---
+
+## Skills Demonstrated
+
+- SQL business analysis.
+- Python data transformation.
+- ETL pipeline development.
+- Data-quality validation and auditing.
+- JSON parsing and transformation.
+- Relational data modeling.
+- Operational KPI development.
+- Cost Per Delivery analysis.
+- Rider productivity and utilization analysis.
+- First-party vs third-party fleet comparison.
+- Payout and invoice reconciliation.
+- Statistical threshold-based anomaly detection.
+- Analytical database development.
+- Business intelligence dashboard design.
+- Business insight communication.
+
+---
+
+## Future Improvements
+
+Potential extensions include:
+
+- Replace synthetic datasets with anonymized public logistics datasets.
+- Add automated ETL and data-quality tests.
+- Implement rolling-window and segment-specific anomaly thresholds.
+- Add forecasting for delivery volume and Cost Per Delivery.
+- Build a deployed web-based analytics application.
+- Add orchestration for scheduled pipeline execution.
+
+---
+
+## Author
+
+**Manan Shiva**
+
+B.Tech Computer Science & Engineering  
+Indian Institute of Information Technology Kota
+
+**LinkedIn:** [linkedin.com/in/manan-shiva-483b0227b](https://linkedin.com/in/manan-shiva-483b0227b)
+
+**GitHub:** [github.com/ms1706g](https://github.com/ms1706g)
