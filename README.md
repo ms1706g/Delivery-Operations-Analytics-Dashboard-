@@ -1,8 +1,10 @@
 # Delivery Operations Analytics & Cost Intelligence System
 
-End-to-end analytics project for last-mile delivery operations, combining **Python ETL pipelines, SQL analytics, SQLite, operational KPI modeling, payout reconciliation, statistical cost anomaly detection, and interactive dashboarding**.
+An end-to-end analytics and data engineering project for last-mile delivery operations, combining **Python ETL pipelines, SQL analytics, SQLite, data quality engineering, operational KPI modeling, cost intelligence, interactive dashboards, and AWS cloud integration**.
 
-The system processes **60K+ delivery orders across 600 riders** to analyze delivery costs, rider performance, fleet economics, payout accuracy, and operational trends across first-party (1P) and third-party (3P) logistics channels.
+The system processes 60K+ delivery orders across 600 riders to analyze delivery costs, rider performance, fleet economics, payout calculations, and operational trends across first-party (1P) and third-party (3P) logistics channels.
+
+It also implements a cloud-connected **Bronze–Silver–Gold data architecture** using Amazon S3, AWS Glue Data Catalog, Amazon Athena, and Python Boto3.
 
 ---
 
@@ -12,11 +14,16 @@ Delivery operations teams need to continuously balance service volume, rider cap
 
 This project builds a reproducible analytics workflow that transforms raw operational data into validated analytical datasets, SQL-based business insights, and decision-ready dashboards.
 
+The project combines two complementary workflows:
+
+- **Analytics workflow:** Python ETL, SQLite, SQL business analysis, KPI modeling, and dashboarding.
+- **Cloud data engineering workflow:** Bronze–Silver–Gold transformations, Parquet datasets, Amazon S3 storage, Glue Data Catalog, and Athena SQL analytics.
+
 The analysis focuses on five business questions:
 
-- How does **Cost Per Delivery (CPD)** vary across cities, months, riders, and fleet models?
+- How does Cost Per Delivery (CPD) vary across cities, months, riders, and fleet models?
 - Which riders demonstrate the strongest productivity and utilization?
-- How do **1P and 3P logistics channels** compare in cost and operational performance?
+- How do 1P and 3P logistics channels compare in cost and operational performance?
 - Are rider payouts and third-party partner invoices consistent with approved rate cards?
 - Which deliveries exhibit unusually high costs and require operational investigation?
 
@@ -25,11 +32,18 @@ The analysis focuses on five business questions:
 ## Project Highlights
 
 - Processed **60,075 raw delivery records** and **600 rider profiles**.
-- Built a reproducible **Python ETL pipeline** for validation, deduplication, transformation, aggregation, and database loading.
-- Parsed and reconciled **12K third-party delivery records from nested JSON feeds**.
-- Developed SQL analytics for **CPD, rider productivity, utilization, fleet comparison, payout reconciliation, and time-series trends**.
-- Created weekly and monthly analytical marts for recurring KPI reporting.
-- Identified **2,433 high-cost deliveries** using statistical threshold-based anomaly detection.
+- Built reproducible Python ETL pipelines for validation, deduplication, transformation, aggregation, and database loading.
+- Parsed and processed nested JSON feeds containing 12,000 third-party delivery records.
+- Implemented a Bronze–Silver–Gold data architecture.
+- Developed a Silver layer with schema validation, duplicate handling, rejected-record quarantine, and Parquet output.
+- Built Gold analytical marts for city performance and rider performance/payout analysis.
+- Integrated Python ETL workflows with Amazon S3 using Boto3.
+- Uploaded 12 Bronze, Silver, and Gold pipeline objects to AWS S3.
+- Created an AWS Glue Data Catalog database with two external Parquet tables.
+- Executed SQL analytics directly on S3 datasets using Amazon Athena.
+- Validated cloud query results against local Gold datasets.
+- Developed SQL analytics for CPD, rider productivity, utilization, fleet comparison, payout reconciliation, and time-series trends.
+- Identified 2,433 high-cost deliveries using statistical threshold-based anomaly detection.
 - Designed a four-page BI dashboard specification covering executive, rider, fleet, and cost-control analytics.
 - Built a standalone interactive dashboard for offline exploration of operational KPIs.
 
@@ -43,32 +57,87 @@ The analysis focuses on five business questions:
 | Raw Order Records | 60,075 |
 | Valid Orders After ETL | 59,990 |
 | Delivered Orders | 56,912 |
-| Third-Party Delivery Records | 11,998 |
+| Cancelled Orders | 2,147 |
+| Failed Orders | 931 |
+| Third-Party Raw Records | 12,000 |
 | Average Cost Per Delivery | INR 57.16 |
 | Statistical Cost Anomalies | 2,433 |
-| Analysis Period | Jan 2024 - Dec 2025 |
+| Analysis Period | Jan 2024 – Dec 2025 |
 
 ---
 
 ## Analytics Architecture
 
+### Overall Architecture
+
 ```mermaid
-flowchart LR
-    A["Synthetic Data Generator"] --> B["CSV & JSON Raw Data Layer"]
-    B --> C["Python ETL Pipeline"]
-    C --> D["Validation & Data Quality Controls"]
-    D --> E["Business Metric Transformation"]
-    E --> F["Rider-Day, Weekly & Monthly Aggregation"]
-    F --> G[("SQLite Analytics Database")]
+flowchart TD
+    A["Synthetic Data Generator"] --> B["Raw CSV & JSON Data"]
+    B --> C["Original Python ETL Pipeline"]
+    C --> D["SQLite Analytics Database"]
+    D --> E["SQL Business Analysis"]
+    D --> F["Interactive Dashboard"]
 
-    G --> H["SQL Business Analysis"]
-    G --> I["Jupyter Exploratory Analysis"]
-    G --> J["BI Semantic Model & Dashboard Design"]
+    B --> G["Cloud Bronze Ingestion"]
+    G --> H["Bronze: Raw JSONL"]
+    H --> I["Silver: Validation & Cleaning"]
+    I --> J["Parquet Datasets"]
+    J --> K["Gold: Business Aggregations"]
+    K --> L["Gold Parquet Marts"]
 
-    J --> K["Executive Summary"]
-    J --> L["Rider Analytics"]
-    J --> M["1P vs 3P Fleet Analysis"]
-    J --> N["Cost Control & Reconciliation"]
+    H --> M["Amazon S3"]
+    J --> M
+    L --> M
+
+    M --> N["AWS Glue Data Catalog"]
+    N --> O["Amazon Athena"]
+    O --> P["Cloud SQL Analytics"]
+```
+
+### Cloud Data Architecture
+
+```text
+Raw CSV / JSON Sources
+         |
+         v
+   Bronze Ingestion
+         |
+         v
+   Bronze Layer
+   Raw JSONL batches
+         |
+         v
+   Silver Transformation
+   - Schema validation
+   - Deduplication
+   - Type conversion
+   - Data quality checks
+   - Rejected-record quarantine
+         |
+         v
+   Silver Layer
+   Cleaned Parquet datasets
+         |
+         v
+   Gold Transformation
+   - City performance mart
+   - Rider performance and payout mart
+         |
+         v
+   Gold Layer
+   Business-ready Parquet datasets
+         |
+         v
+      Amazon S3
+         |
+         v
+ AWS Glue Data Catalog
+         |
+         v
+    Amazon Athena
+         |
+         v
+     SQL Analytics
 ```
 
 ---
@@ -77,15 +146,10 @@ flowchart LR
 
 ```mermaid
 erDiagram
-
     RIDERS ||--o{ ORDERS : fulfills
-
     RIDERS ||--o{ RIDER_DAILY_METRICS : summarized_as
-
     ORDERS ||--o| PARTNER_ORDERS : reconciled_with
-
     ORDERS ||--o| DELIVERY_METRICS : transformed_into
-
     PAYOUT_RATECARD ||--o{ DELIVERY_METRICS : determines
 
     RIDERS {
@@ -143,68 +207,226 @@ The project uses reproducible synthetic operational data designed to simulate co
 | `payout_ratecard.csv` | One vehicle type | 3 | Contract payout rules |
 | `third_party_feed.json` | One partner delivery | 12,000 raw | Third-party invoice reconciliation |
 
-The raw data intentionally includes:
+The raw data intentionally includes duplicate order records, invalid dates, partner records that no longer match after cleaning, and payout differences.
 
-- Duplicate order records.
-- Invalid date values.
-- Third-party partner records that no longer match after order cleaning.
-- Differences between expected and actual payout amounts.
-
-These conditions are used to demonstrate data validation, quality auditing, reconciliation, and exception analysis.
+These conditions demonstrate data validation, quality auditing, reconciliation, and exception analysis.
 
 ---
 
 ## ETL Pipeline
 
-The ETL workflow converts raw operational data into validated, analysis-ready datasets.
+### 1. Original Analytics ETL
 
-### 1. Data Extraction
+The original pipeline:
 
 - Loads rider, order, and payout-rate-card CSV files.
-- Parses nested JSON feeds containing third-party logistics records.
+- Parses nested JSON feeds.
+- Validates dates, numeric ranges, business categories, relationships, and required fields.
+- Removes duplicates and rejects malformed records.
+- Calculates expected payouts, payout variances, delivery costs, revenue, profit, and cost anomalies.
+- Produces rider-day, weekly, and monthly analytical aggregates.
+- Loads transformed datasets into SQLite within a transaction.
 
-### 2. Data Validation
+### 2. Cloud Bronze Layer
 
-The pipeline validates:
+- Ingests CSV and JSON source records.
+- Preserves source metadata, batch identifiers, ingestion timestamps, and SHA-256 checksums.
+- Converts source records into JSONL batch files.
+- Uploads selected complete batches to Amazon S3.
 
-- Date formats.
-- Numeric ranges.
-- Business category values.
-- Rider foreign-key relationships.
-- Unique order identifiers.
-- Required fields.
+### 3. Cloud Silver Layer
 
-### 3. Data Cleaning
+- Reads Bronze JSONL batches.
+- Validates schemas and required fields.
+- Removes exact duplicates.
+- Normalizes dates, numeric values, and string fields.
+- Preserves optional missing customer ratings.
+- Quarantines rejected records.
+- Writes cleaned datasets as Parquet.
+- Generates a JSON data quality report.
 
-- Removes duplicate order records.
-- Rejects malformed dates and invalid records.
-- Standardizes operational fields.
-- Tracks rejected records through ETL audit outputs.
+### 4. Cloud Gold Layer
 
-### 4. Business Metric Transformation
+Creates two business-ready analytical marts:
 
-The pipeline calculates:
+**City Performance Mart**
+- Total orders by city.
+- Delivered, cancelled, and failed orders.
+- Delivery success rate.
+- Average delivery time.
+- Average delivery distance.
+- Average customer rating.
+- Delivered order value.
 
-- Expected rider payout.
-- Actual payout.
-- Payout variance.
-- Delivery cost.
-- Allocated revenue.
-- Profit.
-- Profit margin.
-- Statistical cost-anomaly indicators.
+**Rider Performance and Payout Mart**
+- Rider profile and employment information.
+- Order counts by delivery status.
+- Total delivered distance.
+- Average delivery time and rating.
+- Estimated rider payout.
+- Delivery success rate.
 
-### 5. Analytical Aggregation
+The estimated payout is calculated using the implemented rate-card formula. It should not be interpreted as verified actual company payout.
 
-Operational data is aggregated into:
+---
 
-- Rider-day performance metrics.
-- Weekly KPI tables.
-- Monthly KPI tables.
+## Amazon Web Services Integration
 
-### 6. Database Loading
+### Services Used
 
-Source tables, transformed datasets, and analytical marts are loaded into SQLite within a single transaction.
+| AWS Service | Purpose |
+|---|---|
+| Amazon S3 | Cloud storage for Bronze, Silver, and Gold datasets |
+| AWS IAM | Restricted access management |
+| AWS Glue Data Catalog | Database and table metadata management |
+| Amazon Athena | SQL queries on S3-backed Parquet datasets |
+| AWS CLI | Local AWS authentication and command-line operations |
+| Boto3 | Python integration with Amazon S3 |
+
+**AWS Region:** Asia Pacific (Mumbai) – `ap-south-1`
+
+### Amazon S3 Storage Architecture
+
+Bucket:
+
+`manan-delivery-ops-analytics-2026`
+
+```text
+manan-delivery-ops-analytics-2026/
+│
+├── bronze/
+│   ├── orders/
+│   ├── riders/
+│   ├── payout_ratecard/
+│   └── third_party_feed/
+│
+├── silver/
+│   ├── orders/
+│   ├── riders/
+│   ├── payout_ratecard/
+│   ├── third_party_feed/
+│   ├── quarantine/
+│   └── quality_report.json
+│
+├── gold/
+│   ├── delivery_performance_by_city.parquet
+│   ├── rider_performance_and_payout.parquet
+│   ├── city_performance/
+│   └── rider_performance/
+│
+├── athena-results/
+│
+└── test/
+```
+
+The original Gold objects were retained, and copies were placed into separate S3 prefixes for independent Athena table registration.
+
+### Upload Summary
+
+| Layer | Uploaded Objects |
+|---|---:|
+| Bronze | 4 |
+| Silver | 6 |
+| Gold | 2 |
+| **Total pipeline objects** | **12** |
+
+The S3 bucket contained 14 objects, including two integration test objects, with approximately 32.2 MiB reported storage at verification time.
+
+### Python Boto3 Integration
+
+Implemented reusable Python modules:
+
+- `aws/s3_client.py` – Creates the S3 client and verifies bucket access.
+- `aws/s3_uploader.py` – Provides reusable file-upload functionality.
+- `aws/upload_bronze.py` – Uploads selected complete Bronze batches.
+- `aws/upload_silver.py` – Uploads Silver Parquet datasets and quality outputs.
+- `aws/upload_gold.py` – Uploads Gold analytical datasets.
+
+AWS credentials are configured through the AWS CLI credentials provider rather than hardcoded in source code.
+
+The project IAM policy uses restricted S3 access to the project bucket and does not grant object deletion permission.
+
+---
+
+## AWS Glue Data Catalog
+
+Created Glue database:
+
+`delivery_ops_analytics`
+
+Registered two external Parquet tables:
+
+| Table | Columns | S3 Dataset |
+|---|---:|---|
+| `city_performance` | 10 | Gold city performance |
+| `rider_performance` | 14 | Gold rider performance and payout |
+
+The catalog tables allow Athena to query the datasets directly from S3.
+
+---
+
+## Amazon Athena SQL Analytics
+
+Used Amazon Athena to run SQL queries against the Gold Parquet datasets stored in S3.
+
+### 1. City Performance Query
+
+```sql
+SELECT
+    city,
+    total_orders,
+    delivered_orders,
+    delivery_success_rate_pct
+FROM city_performance
+ORDER BY total_orders DESC;
+```
+
+### 2. Top Riders by Estimated Payout
+
+```sql
+SELECT
+    rider_id,
+    rider_name,
+    city,
+    total_orders,
+    delivered_orders,
+    estimated_total_payout,
+    delivery_success_rate_pct
+FROM rider_performance
+ORDER BY estimated_total_payout DESC
+LIMIT 10;
+```
+
+### 3. Overall Rider and Order Reconciliation
+
+```sql
+SELECT
+    COUNT(*) AS total_riders,
+    SUM(total_orders) AS total_orders,
+    SUM(delivered_orders) AS delivered_orders,
+    SUM(cancelled_orders) AS cancelled_orders,
+    SUM(failed_orders) AS failed_orders,
+    ROUND(SUM(estimated_total_payout), 2)
+        AS total_estimated_payout
+FROM rider_performance;
+```
+
+### Cloud Validation Results
+
+The overall Athena aggregation was compared with the local Gold dataset.
+
+| Metric | Athena Result |
+|---|---:|
+| Total Riders | 600 |
+| Total Orders | 59,990 |
+| Delivered Orders | 56,912 |
+| Cancelled Orders | 2,147 |
+| Failed Orders | 931 |
+| Estimated Total Payout | INR 29,87,169.83 |
+
+All reported reconciliation values matched the local Gold output.
+
+This validates the S3 upload, Parquet table definitions, and cloud SQL results for the tested datasets.
 
 ---
 
@@ -222,10 +444,10 @@ Source tables, transformed datasets, and analytical marts are loaded into SQLite
 | Profit Margin | Profit / revenue |
 | Cost Anomaly | Delivery cost greater than mean + 2 population standard deviations |
 
-Detailed business rules are documented in:
+Detailed business rules:
 
-- [`docs/kpi_documentation.md`](docs/kpi_documentation.md)
-- [`docs/data_dictionary.md`](docs/data_dictionary.md)
+- `docs/kpi_documentation.md`
+- `docs/data_dictionary.md`
 
 ---
 
@@ -241,48 +463,38 @@ The query pack includes:
 - Top and bottom riders by normalized productivity.
 - Rider utilization analysis.
 - First-party versus third-party fleet economics.
-- 1P vs 3P delivery cost comparison.
 - Rate-card payout reconciliation.
-- Largest invoice and payout variances.
-- Weekly operational trends.
-- Monthly performance trends.
+- Weekly and monthly operational trends.
 - City contribution to delivery volume.
-- Rider performance ranking.
 - Cost anomaly analysis.
-- Statistical cost-threshold computation using SQLite SQL.
 
-Explore the complete SQL query pack:
+Explore:
 
-[`sql/analytics_queries.sql`](sql/analytics_queries.sql)
+`sql/analytics_queries.sql`
 
 ---
 
 # Dashboard
 
-The project includes a **four-page business intelligence dashboard design** covering executive KPIs, rider performance, fleet economics, and cost-control analysis.
+The project includes a four-page business intelligence dashboard design covering executive KPIs, rider performance, fleet economics, and cost-control analysis.
 
 A standalone interactive HTML dashboard is also included for offline exploration of filters, KPIs, trends, rider rankings, fleet comparisons, and anomaly records.
 
 ## Interactive Dashboard
 
-Open:
-
-[`powerbi/delivery_operations_dashboard.html`](powerbi/delivery_operations_dashboard.html)
+`powerbi/delivery_operations_dashboard.html`
 
 The dashboard can be opened locally in Edge or Chrome without requiring a database connection, Python environment, or external server.
 
 The Power BI model relationships, DAX measures, filters, layout, and interaction specifications are documented in:
 
-[`powerbi/dashboard_design.md`](powerbi/dashboard_design.md)
+`powerbi/dashboard_design.md`
 
----
-
-## Executive Summary Dashboard
+### Executive Summary Dashboard
 
 ![Executive Summary Dashboard](powerbi/mockups/01_executive_summary.svg)
 
 **Focus Areas**
-
 - Total delivery volume.
 - Average Cost Per Delivery.
 - Monthly CPD trends.
@@ -290,14 +502,11 @@ The Power BI model relationships, DAX measures, filters, layout, and interaction
 - Delivery volume distribution.
 - Operational anomaly monitoring.
 
----
-
-## Rider Analytics Dashboard
+### Rider Analytics Dashboard
 
 ![Rider Analytics Dashboard](powerbi/mockups/02_rider_analytics.svg)
 
 **Focus Areas**
-
 - Rider productivity.
 - Utilization rate.
 - Delivered orders.
@@ -305,14 +514,11 @@ The Power BI model relationships, DAX measures, filters, layout, and interaction
 - Performance rankings.
 - Underperforming rider identification.
 
----
-
-## 1P vs 3P Fleet Analysis
+### 1P vs 3P Fleet Analysis
 
 ![1P vs 3P Fleet Analysis Dashboard](powerbi/mockups/03_1p_vs_3p.svg)
 
 **Focus Areas**
-
 - First-party versus third-party CPD.
 - Delivery volume comparison.
 - Distance and cost analysis.
@@ -320,14 +526,11 @@ The Power BI model relationships, DAX measures, filters, layout, and interaction
 - Fleet utilization.
 - Partner performance.
 
----
-
-## Cost Control & Reconciliation
+### Cost Control & Reconciliation
 
 ![Cost Control Dashboard](powerbi/mockups/04_cost_control.svg)
 
 **Focus Areas**
-
 - Expected versus actual payouts.
 - Payout variance.
 - Rate-card reconciliation.
@@ -341,43 +544,42 @@ The Power BI model relationships, DAX measures, filters, layout, and interaction
 
 ### 1. Delivery Volume
 
-**Bengaluru generated the highest delivery volume with 15,973 completed deliveries**, making it the largest operating market in the dataset.
+Bengaluru generated the highest delivery volume with 15,973 completed deliveries.
 
 ### 2. Cost Per Delivery
 
-Overall **Cost Per Delivery was INR 57.16**.
+Overall Cost Per Delivery was INR 57.16.
 
-City-level CPD remained relatively stable, while **Pune recorded the lowest CPD at INR 54.79**.
+Pune recorded the lowest CPD at INR 54.79.
 
 ### 3. First-Party vs Third-Party Fleet Economics
 
-First-party delivery CPD was **INR 57.80**, compared with **INR 55.89 for third-party deliveries** in the generated scenario.
-
-The difference demonstrates how fleet models can be evaluated using cost, delivery volume, utilization, and productivity metrics rather than cost alone.
+First-party delivery CPD was INR 57.80, compared with INR 55.89 for third-party deliveries in the generated scenario.
 
 ### 4. Cost Anomaly Detection
 
-The statistical cost threshold was calculated at **INR 92.78**.
+The statistical cost threshold was INR 92.78.
 
-A total of **2,433 deliveries exceeded the threshold** and were flagged for operational review.
+A total of 2,433 deliveries exceeded the threshold and were flagged for operational review.
 
 ### 5. Delivery Volume Trend
 
-Monthly delivery volume increased from **2,301 deliveries in January 2024 to 2,597 deliveries in December 2025**, with recurring seasonal variation across the analysis period.
+Monthly delivery volume increased from 2,301 deliveries in January 2024 to 2,597 deliveries in December 2025.
 
 ---
 
 ## Statistical Cost Anomaly Detection
 
-High-cost deliveries are identified using a statistical threshold:
+High-cost deliveries are identified using:
 
 ```text
-Cost Threshold = Population Mean + (2 x Population Standard Deviation)
+Cost Threshold = Population Mean
+                  + (2 x Population Standard Deviation)
 ```
 
 Deliveries exceeding the calculated threshold are flagged for further operational investigation.
 
-This approach provides a reproducible baseline for identifying unusual delivery costs while keeping the methodology transparent and interpretable.
+This approach provides a reproducible baseline for identifying unusual delivery costs.
 
 ---
 
@@ -385,46 +587,50 @@ This approach provides a reproducible baseline for identifying unusual delivery 
 
 ```text
 delivery-operations-dashboard/
-|
-|-- data/
-|   |-- riders.csv
-|   |-- orders.csv
-|   |-- payout_ratecard.csv
-|   `-- third_party_feed.json
-|
-|-- docs/
-|   |-- data_dictionary.md
-|   `-- kpi_documentation.md
-|
-|-- etl/
-|   `-- etl_pipeline.py
-|
-|-- notebooks/
-|   `-- delivery_operations_analysis.ipynb
-|
-|-- powerbi/
-|   |-- mockups/
-|   |   |-- 01_executive_summary.svg
-|   |   |-- 02_rider_analytics.svg
-|   |   |-- 03_1p_vs_3p.svg
-|   |   `-- 04_cost_control.svg
-|   |
-|   |-- dashboard_design.md
-|   `-- delivery_operations_dashboard.html
-|
-|-- scripts/
-|   |-- generate_data.py
-|   |-- generate_dashboard_mockups.py
-|   `-- generate_interactive_dashboard.py
-|
-|-- sql/
-|   |-- schema.sql
-|   `-- analytics_queries.sql
-|
-|-- delivery_operations.db
-|-- requirements.txt
-`-- README.md
+│
+├── aws/
+│   ├── __init__.py
+│   ├── s3_client.py
+│   ├── s3_uploader.py
+│   ├── upload_bronze.py
+│   ├── upload_silver.py
+│   └── upload_gold.py
+│
+├── data/
+│   ├── bronze/
+│   ├── silver/
+│   └── gold/
+│
+├── docs/
+│   ├── data_dictionary.md
+│   ├── kpi_documentation.md
+│   └── aws-cloud-integration.md
+│
+├── etl/
+│   ├── etl_pipeline.py
+│   └── cloud_pipeline/
+│       ├── bronze_ingestion.py
+│       ├── silver/
+│       │   └── transform.py
+│       └── gold/
+│           ├── build_marts.py
+│           └── build_rider_mart.py
+│
+├── tests/
+│   └── cloud_pipeline/
+│       └── gold/
+│           └── test_gold_marts.py
+│
+├── notebooks/
+├── powerbi/
+├── scripts/
+├── sql/
+├── delivery_operations.db
+├── requirements.txt
+└── README.md
 ```
+
+*The structure above highlights the main project components; additional existing files and directories are retained in the repository.*
 
 ---
 
@@ -434,6 +640,7 @@ delivery-operations-dashboard/
 
 ```bash
 git clone https://github.com/ms1706g/Delivery-Operations-Analytics-Dashboard-.git
+
 cd Delivery-Operations-Analytics-Dashboard-
 ```
 
@@ -443,59 +650,68 @@ cd Delivery-Operations-Analytics-Dashboard-
 python scripts/generate_data.py
 ```
 
-### 3. Run the ETL Pipeline
+### 3. Run the Original ETL Pipeline
 
 ```bash
 python etl/etl_pipeline.py
 ```
 
-### 4. Generate Dashboard Mockups
-
-```bash
-python scripts/generate_dashboard_mockups.py
-```
-
-### 5. Generate the Interactive Dashboard
+### 4. Run the Interactive Dashboard Generator
 
 ```bash
 python scripts/generate_interactive_dashboard.py
 ```
 
----
+### 5. Run the Cloud Pipeline
 
-## Run the Jupyter Notebook
+Activate the Python 3.12 virtual environment and install the required dependencies before running the cloud pipeline.
 
-Create a virtual environment:
-
-```bash
-python -m venv .venv
-```
-
-Activate the environment on Windows:
-
-```powershell
-.\.venv\Scripts\Activate.ps1
-```
-
-Install dependencies:
+Bronze ingestion:
 
 ```bash
-pip install -r requirements.txt
+python -m etl.cloud_pipeline.bronze_ingestion
 ```
 
-Launch Jupyter Lab:
+Silver transformation:
 
 ```bash
-jupyter lab notebooks/delivery_operations_analysis.ipynb
+python -m etl.cloud_pipeline.silver.transform
 ```
 
----
-
-## Inspect the Analytics Database
+Gold city mart:
 
 ```bash
-python -c "import sqlite3; c=sqlite3.connect('delivery_operations.db'); print(c.execute('SELECT COUNT(*) FROM delivery_metrics').fetchone())"
+python -m etl.cloud_pipeline.gold.build_marts
 ```
+
+Gold rider mart:
+
+```bash
+python -m etl.cloud_pipeline.gold.build_rider_mart
+```
+
+Run Gold tests:
+
+```bash
+python -m pytest tests/cloud_pipeline/gold/ -v
+```
+
+### 6. Upload Datasets to AWS S3
+
+Configure AWS CLI credentials separately using an appropriately restricted IAM identity.
+
+Then run:
+
+```bash
+python -m aws.s3_client
+python -m aws.upload_bronze
+python -m aws.upload_silver
+python -m aws.upload_gold
+```
+
+These commands upload the selected local datasets to the configured project bucket. They require valid AWS credentials and the configured bucket and region.
+
+**Note:** Cloud resources and AWS charges depend on account eligibility, usage, and region. Review AWS billing before running additional cloud services.
 
 ---
 
@@ -507,10 +723,15 @@ python -c "import sqlite3; c=sqlite3.connect('delivery_operations.db'); print(c.
 | Data Analysis | Pandas, NumPy |
 | Querying | SQL |
 | Database | SQLite |
-| Data Engineering | ETL Pipelines, Data Validation, JSON Parsing |
+| Data Formats | CSV, JSON, JSONL, Parquet |
+| Data Engineering | ETL, Data Validation, Data Quality, Data Modeling |
+| Cloud Storage | Amazon S3 |
+| Cloud Metadata | AWS Glue Data Catalog |
+| Cloud Query Engine | Amazon Athena |
+| AWS Integration | Boto3, AWS CLI, IAM |
 | Business Intelligence | Power BI Design Patterns, Interactive Dashboarding |
 | Statistical Analysis | Threshold-Based Cost Anomaly Detection |
-| Development Tools | Git, GitHub, Jupyter Notebook |
+| Development Tools | Git, GitHub, Jupyter Notebook, Pytest |
 
 ---
 
@@ -519,16 +740,21 @@ python -c "import sqlite3; c=sqlite3.connect('delivery_operations.db'); print(c.
 - SQL business analysis.
 - Python data transformation.
 - ETL pipeline development.
-- Data-quality validation and auditing.
+- Data quality validation and auditing.
 - JSON parsing and transformation.
 - Relational data modeling.
+- Bronze–Silver–Gold architecture.
+- Parquet data processing.
+- Amazon S3 integration.
+- AWS IAM access management.
+- AWS Glue Data Catalog.
+- Amazon Athena SQL analytics.
+- Boto3-based cloud integration.
 - Operational KPI development.
 - Cost Per Delivery analysis.
 - Rider productivity and utilization analysis.
-- First-party vs third-party fleet comparison.
-- Payout and invoice reconciliation.
-- Statistical threshold-based anomaly detection.
-- Analytical database development.
+- Payout calculations and reconciliation.
+- Statistical anomaly detection.
 - Business intelligence dashboard design.
 - Business insight communication.
 
@@ -538,12 +764,14 @@ python -c "import sqlite3; c=sqlite3.connect('delivery_operations.db'); print(c.
 
 Potential extensions include:
 
-- Replace synthetic datasets with anonymized public logistics datasets.
-- Add automated ETL and data-quality tests.
-- Implement rolling-window and segment-specific anomaly thresholds.
-- Add forecasting for delivery volume and Cost Per Delivery.
-- Build a deployed web-based analytics application.
-- Add orchestration for scheduled pipeline execution.
+- Implement distributed data transformations using Apache Spark and PySpark.
+- Run managed ETL jobs using AWS Glue.
+- Add automated cloud pipeline orchestration.
+- Introduce scheduled data-quality checks and monitoring.
+- Add rolling-window and segment-specific anomaly thresholds.
+- Build delivery volume and CPD forecasting.
+- Expand cloud analytics with additional Athena datasets.
+- Develop a deployed web-based analytics application.
 
 ---
 
