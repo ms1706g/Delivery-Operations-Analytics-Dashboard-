@@ -1,3 +1,4 @@
+
 # Delivery Operations Analytics & Cost Intelligence System
 
 An end-to-end analytics and data engineering project for last-mile delivery operations, combining **Python ETL pipelines, SQL analytics, SQLite, data quality engineering, operational KPI modeling, cost intelligence, interactive dashboards, and AWS cloud integration**.
@@ -785,3 +786,53 @@ Indian Institute of Information Technology Kota
 **LinkedIn:** [linkedin.com/in/manan-shiva-483b0227b](https://linkedin.com/in/manan-shiva-483b0227b)
 
 **GitHub:** [github.com/ms1706g](https://github.com/ms1706g)
+
+## AWS Cloud Integration
+
+The project has been extended with a cloud-based data engineering workflow using AWS. The original local SQLite analytics pipeline and Power BI dashboard remain unchanged.
+
+### Cloud Architecture
+
+The cloud pipeline follows a Bronze-Silver-Gold data processing approach:
+
+1. **Bronze Layer:** Raw operational data is ingested, enriched with ingestion metadata, and stored as JSONL files.
+2. **Silver Layer:** Data is validated, deduplicated, transformed, and stored in Parquet format. Invalid records are separated into a quarantine dataset.
+3. **Gold Layer:** Curated analytical marts are generated for city-level delivery performance and rider-level performance and estimated payouts.
+
+### AWS Services
+
+| AWS Service | Purpose |
+|---|---|
+| Amazon S3 | Stores Bronze, Silver, and Gold datasets |
+| AWS Glue Data Catalog | Maintains metadata for Gold Parquet tables |
+| Amazon Athena | Runs SQL queries directly on Gold datasets |
+| Boto3 | Connects the Python pipeline to Amazon S3 |
+
+### Amazon S3 Data Organization
+
+The project datasets are stored in the S3 bucket using separate layer prefixes:
+
+```text
+s3://manan-delivery-ops-analytics-2026/
+│
+├── bronze/
+│   ├── orders/
+│   ├── riders/
+│   ├── payout_ratecard/
+│   └── third_party_feed/
+│
+├── silver/
+│   ├── orders/
+│   ├── riders/
+│   ├── payout_ratecard/
+│   ├── third_party_feed/
+│   └── quarantine/
+│
+├── gold/
+│   ├── city_performance/
+│   ├── rider_performance/
+│   ├── delivery_performance_by_city.parquet
+│   └── rider_performance_and_payout.parquet
+│
+└── athena-results/
+```
